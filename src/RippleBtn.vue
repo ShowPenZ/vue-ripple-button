@@ -1,58 +1,60 @@
-
 <script>
-import ClassName from "classnames";
+import ClassName from 'classnames';
 
 function debounce(func, delay) {
-  let inDebounce = "";
+  let inDebounce = '';
   inDebounce = undefined;
 
   return () => {
-    let args = "";
-    let context = "";
+    let args = '';
+    let context = '';
 
     context = this;
     args = arguments;
 
     clearTimeout(inDebounce);
+    inDebounce = setTimeout(() => func.apply(context, args), delay);
 
-    return (inDebounce = setTimeout(() => func.apply(context, args), delay));
+    return inDebounce;
   };
 }
 
-const RippleBtn = {
-  name: "RippleBtn",
+export default {
+  name: 'RippleBtn',
   props: {
     btnClassName: {
       type: String,
-      required: false
+      required: false,
+      default: '',
     },
     btnStyle: {
       type: Object,
-      required: false
+      required: false,
+      default: {},
     },
     text: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       ripples: null,
       ripple: null,
-      rippleContainer: null
+      rippleContainer: null,
     };
   },
   mounted() {
     const that = this;
 
-    that.ripples = document.querySelectorAll("[ripple]");
+    that.ripples = document.querySelectorAll('[ripple]');
 
-    that.rippleContainer = document.createElement("div");
-    that.rippleContainer.className = "ripple--container";
+    that.rippleContainer = document.createElement('div');
+    that.rippleContainer.className = 'ripple--container';
 
     that.ripple = that.ripples;
-    that.ripple[0].addEventListener("mousedown", that.showRipple);
-    that.ripple[0].addEventListener("mouseup", debounce(that.cleanUp, 2000));
+    that.ripple[0].addEventListener('mousedown', that.showRipple);
+    that.ripple[0].addEventListener('mouseup', debounce(that.cleanUp, 2000));
     that.ripple[0].rippleContainer = that.rippleContainer;
     that.ripple[0].appendChild(that.rippleContainer);
   },
@@ -61,33 +63,24 @@ const RippleBtn = {
       const that = this;
 
       let pos = null;
-      let rippler = "";
+      let rippler = '';
       let size = 0;
-      let style = "";
+      let style = '';
       let x = 0;
       let y = 0;
 
-      rippler = document.createElement("span");
+      rippler = document.createElement('span');
 
       size = that.rippleContainer.offsetWidth;
       pos = that.rippleContainer.getBoundingClientRect();
       x = e.pageX - pos.left - size / 2;
       y = e.pageY - pos.top - size / 2;
 
-      style =
-        "top:" +
-        y +
-        "px; left: " +
-        x +
-        "px; height: " +
-        size +
-        "px; width: " +
-        size +
-        "px;";
+      style = 'top:' + y + 'px; left: ' + x + 'px; height: ' + size + 'px; width: ' + size + 'px;';
 
       that.rippleContainer.appendChild(rippler);
 
-      return rippler.setAttribute("style", style);
+      return rippler.setAttribute('style', style);
     },
     cleanUp() {
       const that = this;
@@ -95,7 +88,7 @@ const RippleBtn = {
       while (that.rippleContainer.firstChild) {
         that.rippleContainer.removeChild(that.rippleContainer.firstChild);
       }
-    }
+    },
   },
 
   render() {
@@ -103,23 +96,16 @@ const RippleBtn = {
     const { btnClassName, btnStyle, text } = that;
 
     const onClick = () => {
-      that.$emit("onclick", true);
+      that.$emit('onclick', true);
     };
 
     return (
-      <button
-        class={ClassName("defaultBtn", btnClassName)}
-        ripple="ripple"
-        style={btnStyle}
-        onClick={onClick}
-      >
+      <button class={ClassName('defaultBtn', btnClassName)} ripple="ripple" style={btnStyle} onClick={onClick}>
         {text}
       </button>
     );
-  }
+  },
 };
-
-export default RippleBtn;
 </script>
 <style>
 .defaultBtn {
