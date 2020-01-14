@@ -29,7 +29,7 @@ module.exports = {
     target: 'browser',
   },
 
-  presets: ['@vue/babel-preset-jsx'],
+  // presets: ['@vue/babel-preset-jsx'],
   // plugins: {
   //   vue: true,
   // },

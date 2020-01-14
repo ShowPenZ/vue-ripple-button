@@ -30,7 +30,7 @@ export default {
     btnStyle: {
       type: Object,
       required: false,
-      default: {},
+      default: () => {},
     },
     text: {
       type: String,
